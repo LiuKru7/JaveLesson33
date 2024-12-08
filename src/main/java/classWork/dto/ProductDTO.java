@@ -9,20 +9,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class ProductDTO {
-    private Integer product_id;
-    private String product_name;
+    private Integer productId;
+    private String productName;
     private String description;
     private Double price;
-    private Integer quantity_in_stock;
+    private Integer quantityInStock;
     private String category;
-    private String created_at;
+    private String createdAt;
 
     public ProductDTO(String product_name, String description, Double price, Integer quantity_in_stock, String category, String created_at) {
-        this.product_name = product_name;
+        this.productName = product_name;
         this.description = description;
         this.price = price;
-        this.quantity_in_stock = quantity_in_stock;
+        this.quantityInStock = quantity_in_stock;
         this.category = category;
-        this.created_at = created_at;
+        this.createdAt = created_at;
     }
 }

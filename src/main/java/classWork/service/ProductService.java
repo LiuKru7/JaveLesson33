@@ -31,7 +31,7 @@ public class ProductService {
 
     public double calculateTotalStockValue(List<ProductDTO> products) {
         return products.stream()
-                .mapToDouble(product->product.getPrice()* product.getQuantity_in_stock())
+                .mapToDouble(product->product.getPrice()* product.getQuantityInStock())
                 .sum();
     }
 }

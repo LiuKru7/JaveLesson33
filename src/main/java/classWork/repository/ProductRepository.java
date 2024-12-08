@@ -46,12 +46,12 @@ public class ProductRepository {
                 "VALUES (?,?,?,?,?,?);";
         try (Connection connection = DatabaseRepository.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, product.getProduct_name());
+            ps.setString(1, product.getProductName());
             ps.setString(2, product.getDescription());
             ps.setDouble(3, product.getPrice());
-            ps.setInt(4, product.getQuantity_in_stock());
+            ps.setInt(4, product.getQuantityInStock());
             ps.setString(5, product.getCategory());
-            ps.setString(6, product.getCreated_at());
+            ps.setString(6, product.getCreatedAt());
             ps.executeUpdate();
             System.out.println("Product inserted successfully.");
 
