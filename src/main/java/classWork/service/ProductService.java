@@ -1,9 +1,9 @@
 package classWork.service;
 
 import classWork.dto.ProductDTO;
+import classWork.dto.ProductReviewsDTO;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class ProductService {
     public List<ProductDTO> getAllProductsByCategory(List<ProductDTO> products, String category) {
@@ -34,4 +34,46 @@ public class ProductService {
                 .mapToDouble(product->product.getPrice()* product.getQuantityInStock())
                 .sum();
     }
+
+    //NEW
+
+    public List<ProductDTO> getProductsWithPositiveReviews
+            (List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>> reviews) {
+
+        List<ProductDTO> productsList = new ArrayList<>();
+
+        return productsList;
+
+    }
+
+    public List<ProductDTO> getTopRatedProducts(List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>> reviews, int topN) {
+
+        List<ProductDTO> productsList = new ArrayList<>();
+
+        return productsList;
+    }
+
+    public List<ProductReviewsDTO> getAllReviewTexts(List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>> reviews) {
+
+        List<ProductReviewsDTO> reviewsList = new ArrayList<>();
+
+        return reviewsList;
+    }
+
+    public Map<String, Double> calculateAverageRatingPerProduct(List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>>) {
+        Map<String, Double> ratingList = new HashMap<>();
+
+        return ratingList;
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

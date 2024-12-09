@@ -1,6 +1,7 @@
 package classWork.repository;
 
 import classWork.dto.ProductDTO;
+import classWork.dto.ProductReviewsDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -95,4 +96,26 @@ public class ProductRepository {
         }
         return products;
     }
+
+    public void createReviewsTable() {
+
+    }
+
+    public void dropReviewsTable() {
+
+    }
+
+    public void insertReview (int productId,String reviewText, int rating) {
+
+    }
+    public void getReviewsByProductId (int productId){
+
+    }
+    public List<ProductReviewsDTO> getAllProductsWithReviews() {
+        List<ProductReviewsDTO> reviews = new ArrayList<>();
+
+
+        return  reviews;
+    }
+
 }

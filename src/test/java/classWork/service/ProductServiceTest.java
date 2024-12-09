@@ -32,27 +32,27 @@ public class ProductServiceTest {
     public void testGetProductsBelowPrice() {
         List<ProductDTO> productList = productService.getProductsBelowPrice(products, 1000);
         assertEquals(1,productList.size());
-        assertEquals("Smartphone", productList.get(0).getProduct_name());
+        assertEquals("Smartphone", productList.get(0).getProductName());
     }
 
     @Test
     public void testSortProductsByPriceAsc () {
         List<ProductDTO> productList = productService.sortProductsByPrice(products,false);
-        assertEquals("Smartphone", productList.get(1).getProduct_name());
-        assertEquals("Laptop", productList.get(0).getProduct_name());
+        assertEquals("Smartphone", productList.get(1).getProductName());
+        assertEquals("Laptop", productList.get(0).getProductName());
     }
 
     @Test
     public void testSortProductsByPriceDes () {
         List<ProductDTO> productList = productService.sortProductsByPrice(products,true);
-        assertEquals("Laptop", productList.get(1).getProduct_name());
-        assertEquals("Smartphone", productList.get(0).getProduct_name());
+        assertEquals("Laptop", productList.get(1).getProductName());
+        assertEquals("Smartphone", productList.get(0).getProductName());
     }
 
     @Test
     public void testGetMostExpensiveProduct () {
         ProductDTO mostExpensive = productService.getMostExpensiveProduct(products);
-        assertEquals("Laptop", mostExpensive.getProduct_name());
+        assertEquals("Laptop", mostExpensive.getProductName());
     }
 
     @Test
