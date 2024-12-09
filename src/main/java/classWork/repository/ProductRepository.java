@@ -1,12 +1,15 @@
 package classWork.repository;
 
 import classWork.dto.ProductDTO;
-import classWork.dto.ProductReviewsDTO;
+import classWork.dto.ProductReviewDTO;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+
 
 public class ProductRepository {
 
@@ -128,7 +131,7 @@ public class ProductRepository {
         }
     }
 
-    public void insertReview (ProductReviewsDTO review) {
+    public void insertReview (ProductReviewDTO review) {
         String sql = "INSERT INTO product_review (product_id, review_text, rating) VALUES (?,?,?);";
         try(Connection connection = DatabaseRepository.getConnection()){
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -141,17 +144,17 @@ public class ProductRepository {
         }
     }
 
-    public List<ProductReviewsDTO> getReviewsByProductId (int productId){
+    public List<ProductReviewDTO> getReviewsByProductId (int productId){
         String sql = "SELECT * FROM product_review WHERE product_id = ?;";
         ResultSet rs;
-        List<ProductReviewsDTO> reviews = new ArrayList<>();
+        List<ProductReviewDTO> reviews = new ArrayList<>();
 
         try(Connection connection = DatabaseRepository.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, productId);
             rs = ps.executeQuery();
             while (rs.next())
-                reviews.add(new ProductReviewsDTO(
+                reviews.add(new ProductReviewDTO(
                         rs.getInt("review_id"),
                         rs.getInt("product_id"),
                         rs.getString("review_text"),
@@ -164,15 +167,15 @@ public class ProductRepository {
         return reviews;
     }
 
-    public List<ProductReviewsDTO> getAllReviews() {
-        List<ProductReviewsDTO> reviews = new ArrayList<>();
+    public List<ProductReviewDTO> getAllReviews() {
+        List<ProductReviewDTO> reviews = new ArrayList<>();
         String sql = "SELECT * FROM product_review;";
         ResultSet rs;
         try(Connection connection = DatabaseRepository.getConnection()){
             Statement statement = connection.createStatement();
             rs = statement.executeQuery(sql);
             while (rs.next())
-                reviews.add(new ProductReviewsDTO(
+                reviews.add(new ProductReviewDTO(
                         rs.getInt("review_id"),
                         rs.getInt("product_id"),
                         rs.getString("review_text"),
@@ -183,5 +186,29 @@ public class ProductRepository {
             throw new RuntimeException(e);
         }
         return  reviews;
+    }
+
+    public Map<Integer, List<ProductReviewDTO>> getAllProductsWithReviews() {
+        List<ProductReviewDTO> reviews = new ArrayList<>();
+        String sql = "SELECT * FROM product_review;";
+        ResultSet rs;
+        try(Connection connection = DatabaseRepository.getConnection()){
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery(sql);
+            while (rs.next())
+                reviews.add(new ProductReviewDTO(
+                        rs.getInt("review_id"),
+                        rs.getInt("product_id"),
+                        rs.getString("review_text"),
+                        rs.getInt("rating"),
+                        rs.getDate("created_at")
+                ));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return reviews.stream()
+                .collect(Collectors.groupingBy(
+                        ProductReviewDTO::getProductId
+                ));
     }
 }
