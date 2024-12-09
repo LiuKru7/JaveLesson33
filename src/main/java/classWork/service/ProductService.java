@@ -2,8 +2,10 @@ package classWork.service;
 
 import classWork.dto.ProductDTO;
 import classWork.dto.ProductReviewsDTO;
+import classWork.dto.ProductWithReviewDTO;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProductService {
     public List<ProductDTO> getAllProductsByCategory(List<ProductDTO> products, String category) {
@@ -35,45 +37,79 @@ public class ProductService {
                 .sum();
     }
 
+//    public List<ProductWithReviewDTO> s (List<ProductDTO> products, List<ProductReviewsDTO> reviews) {
+//        List<ProductWithReviewDTO> productsWithReviews = new ArrayList<>();
+//        for (ProductDTO product : products) {
+//            ProductWithReviewDTO productWithReview = new ProductWithReviewDTO(product);
+//            List<ProductReviewsDTO> matchingReviews = new ArrayList<>();
+//            for (ProductReviewsDTO review : reviews) {
+//                if (product.getProductId().equals(review.getProductId())) {
+//                    matchingReviews.add(review);
+//                }
+//            }
+//            productWithReview.setReviews(matchingReviews);
+//            productsWithReviews.add(productWithReview);
+//        }
+//        return productsWithReviews;
+//    }
+//    public List<ProductWithReviewDTO> s(List<ProductDTO> products, List<ProductReviewsDTO> reviews) {
+//        return products.stream()
+//                .map(product -> {
+//                    ProductWithReviewDTO productWithReview = new ProductWithReviewDTO(product);
+//                    List<ProductReviewsDTO> matchingReviews = reviews.stream()
+//                            .filter(review -> product.getProductId().equals(review.getProductId()))
+//                            .collect(Collectors.toList());
+//                    productWithReview.setReviews(matchingReviews);
+//                    return productWithReview;
+//                })
+//                .collect(Collectors.toList());
+//    }
+
+    public List<ProductWithReviewDTO> s(List<ProductDTO> products, List<ProductReviewsDTO> reviews) {
+        Map<Integer, List<ProductReviewsDTO>> reviewsByProductId = reviews.stream()
+                .collect(Collectors.groupingBy(ProductReviewsDTO::getProductId));
+
+        return products.stream()
+                .map(product -> {
+                    ProductWithReviewDTO productWithReview = new ProductWithReviewDTO(product);
+                    productWithReview.setReviews(
+                            reviewsByProductId.getOrDefault(product.getProductId(), new ArrayList<>())
+                    );
+                    return productWithReview;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
     //NEW
-
-    public List<ProductDTO> getProductsWithPositiveReviews
-            (List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>> reviews) {
-
-        List<ProductDTO> productsList = new ArrayList<>();
-
-        return productsList;
-
-    }
-
-    public List<ProductDTO> getTopRatedProducts(List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>> reviews, int topN) {
-
-        List<ProductDTO> productsList = new ArrayList<>();
-
-        return productsList;
-    }
-
-    public List<ProductReviewsDTO> getAllReviewTexts(List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>> reviews) {
-
-        List<ProductReviewsDTO> reviewsList = new ArrayList<>();
-
-        return reviewsList;
-    }
-
-    public Map<String, Double> calculateAverageRatingPerProduct(List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>>) {
-        Map<String, Double> ratingList = new HashMap<>();
-
-        return ratingList;
-    }
-
-
-
-
-
-
-
-
-
-
-
+//
+//    public List<ProductDTO> getProductsWithPositiveReviews
+//            (List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>> reviews) {
+//
+//        List<ProductDTO> productsList = new ArrayList<>();
+//
+//        return productsList;
+//
+//    }
+//
+//    public List<ProductDTO> getTopRatedProducts(List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>> reviews, int topN) {
+//
+//        List<ProductDTO> productsList = new ArrayList<>();
+//
+//        return productsList;
+//    }
+//
+//    public List<ProductReviewsDTO> getAllReviewTexts(List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>> reviews) {
+//
+//        List<ProductReviewsDTO> reviewsList = new ArrayList<>();
+//
+//        return reviewsList;
+//    }
+//
+//    public Map<String, Double> calculateAverageRatingPerProduct(List<ProductDTO> products, Map<Integer, List<ProductReviewsDTO>>) {
+//        Map<String, Double> ratingList = new HashMap<>();
+//
+//        return ratingList;
+//    }
 }

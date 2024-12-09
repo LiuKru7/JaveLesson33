@@ -4,6 +4,7 @@ import classWork.dto.ProductDTO;
 import classWork.dto.ProductReviewsDTO;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,24 +99,89 @@ public class ProductRepository {
     }
 
     public void createReviewsTable() {
-
+        String sql = """
+                CREATE TABLE IF NOT EXISTS product_review (
+                review_id SERIAL PRIMARY KEY,
+                product_id int,
+                review_text VARCHAR(255) NOT NULL,
+                rating int CHECK (rating >= 0 AND rating <= 10),
+                created_at DATE DEFAULT CURRENT_DATE NOT NULL,
+                FOREIGN KEY (product_id) REFERENCES product(product_id));
+                """;
+        try(Connection connection = DatabaseRepository.getConnection()){
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            System.out.println("Table PRODUCT_REVIEW was created");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void dropReviewsTable() {
-
+        String sql = "DROP TABLE IF EXISTS product_review;";
+        try(Connection connection = DatabaseRepository.getConnection()){
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            System.out.println("Table PRODUCT_REVIEW was deleted");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void insertReview (int productId,String reviewText, int rating) {
-
+    public void insertReview (ProductReviewsDTO review) {
+        String sql = "INSERT INTO product_review (product_id, review_text, rating) VALUES (?,?,?);";
+        try(Connection connection = DatabaseRepository.getConnection()){
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, review.getProductId());
+            ps.setString(2, review.getReviewText());
+            ps.setInt(3,review.getRating());
+            ps.executeUpdate();
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void getReviewsByProductId (int productId){
 
-    }
-    public List<ProductReviewsDTO> getAllProductsWithReviews() {
+    public List<ProductReviewsDTO> getReviewsByProductId (int productId){
+        String sql = "SELECT * FROM product_review WHERE product_id = ?;";
+        ResultSet rs;
         List<ProductReviewsDTO> reviews = new ArrayList<>();
 
-
-        return  reviews;
+        try(Connection connection = DatabaseRepository.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, productId);
+            rs = ps.executeQuery();
+            while (rs.next())
+                reviews.add(new ProductReviewsDTO(
+                        rs.getInt("review_id"),
+                        rs.getInt("product_id"),
+                        rs.getString("review_text"),
+                        rs.getInt("rating"),
+                        rs.getDate("created_at")
+                ));
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return reviews;
     }
 
+    public List<ProductReviewsDTO> getAllReviews() {
+        List<ProductReviewsDTO> reviews = new ArrayList<>();
+        String sql = "SELECT * FROM product_review;";
+        ResultSet rs;
+        try(Connection connection = DatabaseRepository.getConnection()){
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery(sql);
+            while (rs.next())
+                reviews.add(new ProductReviewsDTO(
+                        rs.getInt("review_id"),
+                        rs.getInt("product_id"),
+                        rs.getString("review_text"),
+                        rs.getInt("rating"),
+                        rs.getDate("created_at")
+                ));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  reviews;
+    }
 }

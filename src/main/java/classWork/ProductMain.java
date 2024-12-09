@@ -1,6 +1,7 @@
 package classWork;
 
 import classWork.dto.ProductDTO;
+import classWork.dto.ProductReviewsDTO;
 import classWork.repository.ProductRepository;
 import classWork.service.ProductService;
 
@@ -16,9 +17,9 @@ public class ProductMain {
 
         ProductService productService = new ProductService();
 
+        productRepository.dropReviewsTable();
         productRepository.dropTable();
         productRepository.createTable();
-
         productRepository.insertProduct(new ProductDTO
                 ("Apple", "red", 0.99, 5, "Fruits", "USA"));
         productRepository.insertProduct(new ProductDTO
@@ -40,7 +41,7 @@ public class ProductMain {
         productRepository.insertProduct(new ProductDTO
                 ("Strawberry", "red", 2.99, 8, "Berries", "Belgium"));
 
-        productRepository.deleteProductById(5);
+//        productRepository.deleteProductById(5);
 
         products = productRepository.getAllProducts();
 
@@ -55,6 +56,33 @@ public class ProductMain {
 
         System.out.println("Most expensive product: " +productService.getMostExpensiveProduct(products) );
         System.out.println(productService.calculateTotalStockValue(products));
+
+        productRepository.createReviewsTable();
+
+        productRepository.insertReview(new ProductReviewsDTO(1, "Amazing quality!", 5));
+        productRepository.insertReview(new ProductReviewsDTO(1, "Good but could be cheaper.", 4));
+        productRepository.insertReview(new ProductReviewsDTO(2, "Very fresh and tasty.", 5));
+        productRepository.insertReview(new ProductReviewsDTO(2, "Not what I expected.", 3));
+        productRepository.insertReview(new ProductReviewsDTO(3, "Very good", 4));
+        productRepository.insertReview(new ProductReviewsDTO(3, "Crisp and delicious.", 5));
+        productRepository.insertReview(new ProductReviewsDTO(4, "Excellent taste!", 5));
+        productRepository.insertReview(new ProductReviewsDTO(4, "A bit too sour for my liking.", 3));
+        productRepository.insertReview(new ProductReviewsDTO(5, "Great value for money.", 4));
+        productRepository.insertReview(new ProductReviewsDTO(5, "Not bad, but not great either.", 3));
+        productRepository.insertReview(new ProductReviewsDTO(6, "Juicy and fresh.", 5));
+        productRepository.insertReview(new ProductReviewsDTO(6, "Overpriced for the quality.", 2));
+        productRepository.insertReview(new ProductReviewsDTO(7, "Perfectly ripe!", 5));
+        productRepository.insertReview(new ProductReviewsDTO(7, "Tastes great in recipes.", 4));
+        productRepository.insertReview(new ProductReviewsDTO(8, "Exceptional product.", 5));
+        productRepository.insertReview(new ProductReviewsDTO(8, "Would buy again.", 4));
+        productRepository.insertReview(new ProductReviewsDTO(9, "Very fresh and crunchy.", 5));
+        productRepository.insertReview(new ProductReviewsDTO(9, "Best I’ve had in years.", 5));
+        productRepository.insertReview(new ProductReviewsDTO(10, "Sweet and juicy.", 5));
+        productRepository.insertReview(new ProductReviewsDTO(10, "Highly recommend.", 5));
+
+        productRepository.getReviewsByProductId(5).forEach(System.out::println);
+        productRepository.getAllReviews().forEach(System.out::println);
+
 
     }
 

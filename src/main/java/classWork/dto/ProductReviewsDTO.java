@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -15,5 +16,11 @@ public class ProductReviewsDTO {
     private Integer productId;
     private String reviewText;
     private Integer rating;
-    private LocalDate created_at;
+    private Date created_at;
+
+    public ProductReviewsDTO(Integer productId, String reviewText, Integer rating) {
+        this.productId = productId;
+        this.reviewText = reviewText;
+        this.rating = rating;
+    }
 }
