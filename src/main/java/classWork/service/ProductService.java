@@ -42,8 +42,6 @@ public class ProductService {
                 .sum();
     }
 
-
-
     public List<ProductWithReviewDTO> getAllProductsWithReviews (List<ProductDTO> products, List<ProductReviewDTO> reviews) {
         return products.stream()
                 .map(product -> {
@@ -81,10 +79,7 @@ public class ProductService {
 
 
     public List<ProductDTO> getTopRatedProducts(
-            List<ProductDTO> products,
-            Map<Integer, List<ProductReviewDTO>> reviews,
-            int topN
-    ) {
+            List<ProductDTO> products, Map<Integer, List<ProductReviewDTO>> reviews, int topN) {
         return products.stream()
                 .sorted((p1, p2) -> {
                     double avgRating1 = calculateAverageRating(p1.getProductId(), reviews);
@@ -102,7 +97,6 @@ public class ProductService {
                 .toList();
     }
 
-
     public List<String> getAllReviewTexts(
             List<ProductDTO> products,
             Map<Integer, List<ProductReviewDTO>> reviews
@@ -116,7 +110,6 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-
     public Map<Integer, Double> calculateAverageRatingPerProduct(List<ProductWithReviewDTO> products) {
         return products.stream()
                 .collect(Collectors.toMap(
@@ -127,8 +120,6 @@ public class ProductService {
                                 .orElse(0.0)
                 ));
     }
-
-
 
     public Map<Integer, Double> calculateAverageRatingPerProduct(
             List<ProductDTO> products, Map<Integer, List<ProductReviewDTO>> reviews) {
