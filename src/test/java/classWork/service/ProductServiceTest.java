@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,7 +25,7 @@ public class ProductServiceTest {
         );
 
         List<ProductReviewDTO> smartphoneReviews = Arrays.asList(
-                new ProductReviewDTO(3, 2, "Great smartphone, worth the price!", 5, new Date()),
+                new ProductReviewDTO(3, 2, "Great smartphone, worth the price!", 3, new Date()),
                 new ProductReviewDTO(4, 2, "Battery life could be better.", 3, new Date())
         );
 
@@ -74,5 +75,27 @@ public class ProductServiceTest {
     public void testCalculateTotalStockValue() {
         Double sum = productService.calculateTotalStockValue(products);
         assertEquals(24000, sum);
+    }
+
+    @Test
+    public void testProductsWithPositiveReviews() {
+        List<ProductDTO> productList = productService.getProductsWithPositiveReviews(products);
+        assertEquals(1, productList.size());
+        assertEquals("Laptop", productList.get(0).getProductName());
+
+    }
+
+    @Test
+    public void testGetAllReviewTexts() {
+        List<String> reviewsTexts = productService.getAllReviewTexts(products);
+        assertEquals(4, reviewsTexts.size());
+    }
+
+    @Test
+    public void calculateAverageRatingPerProduct() {
+        Map<Integer, Double> averageRatings = productService.calculateAverageRatingPerProduct(products);
+        assertEquals(2, averageRatings.size());
+        assertEquals(4.5, averageRatings.get(1));
+        assertEquals(3, averageRatings.get(2));
     }
 }

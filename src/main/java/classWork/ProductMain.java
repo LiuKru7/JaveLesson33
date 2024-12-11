@@ -5,7 +5,6 @@ import classWork.dto.ProductReviewDTO;
 import classWork.repository.ProductRepository;
 import classWork.service.ProductService;
 import classWork.util.ProductDataInitializer;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,14 +60,12 @@ public class ProductMain {
 
         System.out.println(productService.calculateTotalStockValue(products));
 
-
-
         System.out.println("All Reviews with rating more than 4 or equal.");
         productService.getProductsWithPositiveReviews(productsWithReviews).forEach(System.out::println);
         productService.getProductsWithPositiveReviews(products, reviewsMap).forEach(System.out::println);
 
         System.out.println("All Reviews with have rating 5");
-        productService.getTopRatedProducts(products, reviewsMap, 5).forEach(System.out::println);
+        productService.getTopRatedProducts(productsWithReviews, reviewsMap, 5).forEach(System.out::println);
 
         System.out.println("Get all products reviews texts:");
         productService.getAllReviewTexts(productsWithReviews).forEach(System.out::println);
@@ -78,14 +75,5 @@ public class ProductMain {
         System.out.println(productService.calculateAverageRatingPerProduct(productsWithReviews));
         System.out.println(productService.calculateAverageRatingPerProduct(products,reviewsMap));
 
-
-
-
-
-
-
-
-
     }
-
 }
