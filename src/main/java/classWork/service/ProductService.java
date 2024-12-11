@@ -2,7 +2,6 @@ package classWork.service;
 
 import classWork.dto.ProductDTO;
 import classWork.dto.ProductReviewDTO;
-import classWork.dto.ProductWithReviewDTO;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,10 +41,10 @@ public class ProductService {
                 .sum();
     }
 
-    public List<ProductWithReviewDTO> getAllProductsWithReviews (List<ProductDTO> products, List<ProductReviewDTO> reviews) {
+    public List<ProductDTO> getAllProductsWithReviews (List<ProductDTO> products, List<ProductReviewDTO> reviews) {
         return products.stream()
                 .map(product -> {
-                    ProductWithReviewDTO productWithReview = new ProductWithReviewDTO(product);
+                    ProductDTO productWithReview = new ProductDTO(product);
                     List<ProductReviewDTO> matchingReviews = reviews.stream()
                             .filter(review -> product.getProductId().equals(review.getProductId()))
                             .collect(Collectors.toList());
@@ -56,10 +55,10 @@ public class ProductService {
     }
 
 
-    public List<ProductWithReviewDTO> getProductsWithPositiveReviews(List<ProductWithReviewDTO> products) {
+    public List<ProductDTO> getProductsWithPositiveReviews(List<ProductDTO> products) {
         return products.stream()
                 .filter(p->p.getReviews().stream().
-                        anyMatch(r->r.getRating() > 4))
+                        anyMatch(r->r.getRating() >= 4))
                 .toList();
     }
 
@@ -90,7 +89,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public List<String> getAllReviewTexts(List<ProductWithReviewDTO> products){
+    public List<String> getAllReviewTexts(List<ProductDTO> products){
         return products.stream()
                 .flatMap(p->p.getReviews().stream()
                         .map(ProductReviewDTO::getReviewText))
@@ -98,9 +97,7 @@ public class ProductService {
     }
 
     public List<String> getAllReviewTexts(
-            List<ProductDTO> products,
-            Map<Integer, List<ProductReviewDTO>> reviews
-    ) {
+            List<ProductDTO> products, Map<Integer, List<ProductReviewDTO>> reviews) {
         return products.stream()
                 .flatMap(product -> {
                     List<ProductReviewDTO> productReviews = reviews.get(product.getProductId());
@@ -110,7 +107,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public Map<Integer, Double> calculateAverageRatingPerProduct(List<ProductWithReviewDTO> products) {
+    public Map<Integer, Double> calculateAverageRatingPerProduct(List<ProductDTO> products) {
         return products.stream()
                 .collect(Collectors.toMap(
                         ProductDTO::getProductId, // ProductDTO nes kazkodel netinka paveldejusi klase.
