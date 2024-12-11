@@ -28,7 +28,6 @@ public class ProductDataInitializer {
         productRepository.insertProduct(new ProductDTO
                 ("Strawberry", "red", 2.99, 8, "Berries", "Belgium"));
 
-
         productRepository.insertReview(new ProductReviewDTO(1, "Amazing quality!", 5));
         productRepository.insertReview(new ProductReviewDTO(1, "Good but could be cheaper.", 4));
         productRepository.insertReview(new ProductReviewDTO(2, "Very fresh and tasty.", 5));
