@@ -215,4 +215,49 @@ public class ProductRepository {
                         ProductReviewDTO::getProductId
                 ));
     }
+
+    public List<ProductDTO> getAllProductsWithReviewsSql() {
+        List<ProductDTO> products = new ArrayList<>();
+        String productSql = "SELECT * FROM PRODUCT;";
+        String reviewSql = "SELECT * FROM product_review WHERE product_id = ?;";
+
+        try (Connection connection = DatabaseRepository.getConnection()) {
+            try (Statement productStatement = connection.createStatement();
+                 ResultSet productResultSet = productStatement.executeQuery(productSql)) {
+                while (productResultSet.next()) {
+                    ProductDTO product = new ProductDTO(
+                            productResultSet.getInt("product_id"),
+                            productResultSet.getString("product_name"),
+                            productResultSet.getString("description"),
+                            productResultSet.getDouble("price"),
+                            productResultSet.getInt("quantity_in_stock"),
+                            productResultSet.getString("category"),
+                            productResultSet.getString("created_at")
+                    );
+                    products.add(product);
+                }
+            }
+            try (PreparedStatement reviewStatement = connection.prepareStatement(reviewSql)) {
+                for (ProductDTO product : products) {
+                    reviewStatement.setInt(1, product.getProductId());
+                    try (ResultSet reviewResultSet = reviewStatement.executeQuery()) {
+                        while (reviewResultSet.next()) {
+                            ProductReviewDTO review = new ProductReviewDTO(
+                                    reviewResultSet.getInt("review_id"),
+                                    reviewResultSet.getInt("product_id"),
+                                    reviewResultSet.getString("review_text"),
+                                    reviewResultSet.getInt("rating"),
+                                    reviewResultSet.getDate("created_at")
+                            );
+                            product.getReviews().add(review);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching products with reviews", e);
+        }
+        return products;
+    }
+
 }

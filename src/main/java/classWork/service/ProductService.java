@@ -62,9 +62,7 @@ public class ProductService {
     }
 
     public List<ProductDTO> getProductsWithPositiveReviews(
-            List<ProductDTO> products,
-            Map<Integer, List<ProductReviewDTO>> reviews
-    ) {
+            List<ProductDTO> products, Map<Integer, List<ProductReviewDTO>> reviews) {
         return products.stream()
                 .filter(product -> {
                     List<ProductReviewDTO> productReviews = reviews.get(product.getProductId());
@@ -91,8 +89,6 @@ public class ProductService {
                 .limit(topN)
                 .toList();
     }
-
-
 
     public List<ProductDTO> getTopRatedProducts(
             List<ProductDTO> products, Map<Integer, List<ProductReviewDTO>> reviews, int topN) {

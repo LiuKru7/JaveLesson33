@@ -92,10 +92,17 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void calculateAverageRatingPerProduct() {
+    public void testCalculateAverageRatingPerProduct() {
         Map<Integer, Double> averageRatings = productService.calculateAverageRatingPerProduct(products);
         assertEquals(2, averageRatings.size());
         assertEquals(4.5, averageRatings.get(1));
         assertEquals(3, averageRatings.get(2));
+    }
+
+    @Test
+    public void testGetTopRatedProducts() {
+        List<ProductDTO> topProducts = productService.getTopRatedProducts(products, 1);
+        assertEquals(1, topProducts.size());
+        assertEquals(1, topProducts.get(0).getProductId());
     }
 }
