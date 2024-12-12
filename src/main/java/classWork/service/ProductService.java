@@ -54,7 +54,6 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-
     public List<ProductDTO> getProductsWithPositiveReviews(List<ProductDTO> products) {
         return products.stream()
                 .filter(p->p.getReviews().stream().
@@ -74,6 +73,24 @@ public class ProductService {
                 })
                 .collect(Collectors.toList());
     }
+
+
+    public List<ProductDTO> getTopRatedProducts(List<ProductDTO> products, int topN) {
+        return products.stream()
+                .filter(productDTO -> !productDTO.getReviews().isEmpty())
+                .sorted(Comparator.comparingDouble(productDTO ->
+                        productDTO.getReviews().stream()
+                                .mapToInt(ProductReviewDTO::getRating)
+                                .average()
+                                .orElse(0.0)
+                ).reversed())
+                .limit(topN)
+                .collect(Collectors.toList());
+    }
+
+
+
+
 
 
 

@@ -33,18 +33,14 @@ public class ProductMain {
 
         productDataInitializer.generateDate(productRepository);
 
-//        productRepository.deleteProductById(5);
+        productRepository.deleteProductById(5);
 
         products = productRepository.getAllProducts();
         reviews = productRepository.getAllReviews();
         reviewsMap = productRepository.getAllProductsWithReviews();
-        productsWithReviews =  productService.getAllProductsWithReviews(products, reviews);
+        productsWithReviews = productService.getAllProductsWithReviews(products, reviews);
 
         productRepository.getReviewsByProductId(5).forEach(System.out::println);
-
-
-
-
 
 
         System.out.println("Products by category");
@@ -56,7 +52,8 @@ public class ProductMain {
         System.out.println("PRODUCTS SORTED BY PRICE");
         productService.sortProductsByPrice(products, true).forEach(System.out::println);
 
-        System.out.println("Most expensive product: " +productService.getMostExpensiveProduct(products) );
+        System.out.println("Most expensive product: " + productService.getMostExpensiveProduct(products));
+
 
         System.out.println(productService.calculateTotalStockValue(products));
 
@@ -64,8 +61,8 @@ public class ProductMain {
         productService.getProductsWithPositiveReviews(productsWithReviews).forEach(System.out::println);
         productService.getProductsWithPositiveReviews(products, reviewsMap).forEach(System.out::println);
 
-        System.out.println("All Reviews with have rating 5");
-        productService.getTopRatedProducts(productsWithReviews, reviewsMap, 5).forEach(System.out::println);
+        System.out.println("TOP 5 products ");
+        productService.getTopRatedProducts(productsWithReviews, reviewsMap, 1).forEach(System.out::println);
 
         System.out.println("Get all products reviews texts:");
         productService.getAllReviewTexts(productsWithReviews).forEach(System.out::println);
@@ -73,7 +70,7 @@ public class ProductMain {
 
         System.out.println("Get all products rating average by product_id ");
         System.out.println(productService.calculateAverageRatingPerProduct(productsWithReviews));
-        System.out.println(productService.calculateAverageRatingPerProduct(products,reviewsMap));
+        System.out.println(productService.calculateAverageRatingPerProduct(products, reviewsMap));
 
     }
 }

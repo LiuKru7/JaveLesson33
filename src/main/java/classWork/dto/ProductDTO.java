@@ -19,7 +19,7 @@ public class ProductDTO {
     private Integer quantityInStock;
     private String category;
     private String createdAt;
-    private List<ProductReviewDTO> reviews= new ArrayList<>();
+    private List<ProductReviewDTO> reviews = new ArrayList<>();
 
 
     public ProductDTO(String product_name, String description, Double price, Integer quantity_in_stock, String category, String created_at) {
@@ -49,6 +49,6 @@ public class ProductDTO {
         this.quantityInStock = product.getQuantityInStock();
         this.category = product.getCategory();
         this.createdAt = product.getCreatedAt();
-        this.reviews = new ArrayList<>(product.getReviews()); // Kopijuojame peržiūras.
+        this.reviews = new ArrayList<>(product.getReviews());
     }
 }
