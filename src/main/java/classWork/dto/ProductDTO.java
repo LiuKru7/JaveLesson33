@@ -51,4 +51,5 @@ public class ProductDTO {
         this.createdAt = product.getCreatedAt();
         this.reviews = new ArrayList<>(product.getReviews());
     }
+
 }

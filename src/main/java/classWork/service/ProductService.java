@@ -73,24 +73,24 @@ public class ProductService {
                 })
                 .collect(Collectors.toList());
     }
-
-
     public List<ProductDTO> getTopRatedProducts(List<ProductDTO> products, int topN) {
         return products.stream()
-                .filter(productDTO -> !productDTO.getReviews().isEmpty())
-                .sorted(Comparator.comparingDouble(productDTO ->
-                        productDTO.getReviews().stream()
-                                .mapToInt(ProductReviewDTO::getRating)
-                                .average()
-                                .orElse(0.0)
-                ).reversed())
+                .sorted((p1, p2) -> {
+                    double avg1 = p1.getReviews().stream()
+                            .mapToInt(ProductReviewDTO::getRating)
+                            .average()
+                            .orElse(0.0);
+
+                    double avg2 = p2.getReviews().stream()
+                            .mapToInt(ProductReviewDTO::getRating)
+                            .average()
+                            .orElse(0.0);
+
+                    return Double.compare(avg2, avg1);
+                })
                 .limit(topN)
-                .collect(Collectors.toList());
+                .toList();
     }
-
-
-
-
 
 
 

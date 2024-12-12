@@ -43,6 +43,8 @@ public class ProductMain {
         productRepository.getReviewsByProductId(5).forEach(System.out::println);
 
 
+
+
         System.out.println("Products by category");
         productService.getAllProductsByCategory(products, "berries").forEach(System.out::println);
 
@@ -62,15 +64,16 @@ public class ProductMain {
         productService.getProductsWithPositiveReviews(products, reviewsMap).forEach(System.out::println);
 
         System.out.println("TOP 5 products ");
-        productService.getTopRatedProducts(productsWithReviews, reviewsMap, 1).forEach(System.out::println);
+        productService.getTopRatedProducts(productsWithReviews, 3).forEach(System.out::println);
+        productService.getTopRatedProducts(productsWithReviews, reviewsMap, 3).forEach(System.out::println);
 
-        System.out.println("Get all products reviews texts:");
-        productService.getAllReviewTexts(productsWithReviews).forEach(System.out::println);
-        productService.getAllReviewTexts(products, reviewsMap).forEach(System.out::println);
-
-        System.out.println("Get all products rating average by product_id ");
-        System.out.println(productService.calculateAverageRatingPerProduct(productsWithReviews));
-        System.out.println(productService.calculateAverageRatingPerProduct(products, reviewsMap));
+//        System.out.println("Get all products reviews texts:");
+//        productService.getAllReviewTexts(productsWithReviews).forEach(System.out::println);
+//        productService.getAllReviewTexts(products, reviewsMap).forEach(System.out::println);
+//
+//        System.out.println("Get all products rating average by product_id ");
+//        System.out.println(productService.calculateAverageRatingPerProduct(productsWithReviews));
+//        System.out.println(productService.calculateAverageRatingPerProduct(products, reviewsMap));
 
     }
 }
