@@ -39,7 +39,7 @@ public class ProductRepository {
         try (Connection connection = DatabaseRepository.getConnection()) {
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
-            System.out.println("Table delete successfully.");
+            System.out.println("Table PRODUCT deleted successfully.");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -192,72 +192,56 @@ public class ProductRepository {
         return reviews;
     }
 
-    public Map<Integer, List<ProductReviewDTO>> getAllProductsWithReviews() {
-        List<ProductReviewDTO> reviews = new ArrayList<>();
-        String sql = "SELECT * FROM product_review;";
-        ResultSet rs;
-        try (Connection connection = DatabaseRepository.getConnection()) {
-            Statement statement = connection.createStatement();
-            rs = statement.executeQuery(sql);
-            while (rs.next())
-                reviews.add(new ProductReviewDTO(
-                        rs.getInt("review_id"),
-                        rs.getInt("product_id"),
-                        rs.getString("review_text"),
-                        rs.getInt("rating"),
-                        rs.getDate("created_at")
-                ));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return reviews.stream()
-                .collect(Collectors.groupingBy(
-                        ProductReviewDTO::getProductId
-                ));
-    }
-
     public List<ProductDTO> getAllProductsWithReviewsSql() {
         List<ProductDTO> products = new ArrayList<>();
         String productSql = "SELECT * FROM PRODUCT;";
         String reviewSql = "SELECT * FROM product_review WHERE product_id = ?;";
 
         try (Connection connection = DatabaseRepository.getConnection()) {
-            try (Statement productStatement = connection.createStatement();
-                 ResultSet productResultSet = productStatement.executeQuery(productSql)) {
-                while (productResultSet.next()) {
-                    ProductDTO product = new ProductDTO(
-                            productResultSet.getInt("product_id"),
-                            productResultSet.getString("product_name"),
-                            productResultSet.getString("description"),
-                            productResultSet.getDouble("price"),
-                            productResultSet.getInt("quantity_in_stock"),
-                            productResultSet.getString("category"),
-                            productResultSet.getString("created_at")
-                    );
-                    products.add(product);
-                }
+            Statement productStatement = connection.createStatement();
+            ResultSet productResultSet = productStatement.executeQuery(productSql);
+
+            while (productResultSet.next()) {
+                ProductDTO product = getProductDTO(productResultSet);
+                products.add(product);
             }
-            try (PreparedStatement reviewStatement = connection.prepareStatement(reviewSql)) {
-                for (ProductDTO product : products) {
-                    reviewStatement.setInt(1, product.getProductId());
-                    try (ResultSet reviewResultSet = reviewStatement.executeQuery()) {
-                        while (reviewResultSet.next()) {
-                            ProductReviewDTO review = new ProductReviewDTO(
-                                    reviewResultSet.getInt("review_id"),
-                                    reviewResultSet.getInt("product_id"),
-                                    reviewResultSet.getString("review_text"),
-                                    reviewResultSet.getInt("rating"),
-                                    reviewResultSet.getDate("created_at")
-                            );
-                            product.getReviews().add(review);
-                        }
-                    }
+
+            PreparedStatement reviewStatement = connection.prepareStatement(reviewSql);
+            for (ProductDTO product : products) {
+                reviewStatement.setInt(1, product.getProductId());
+                ResultSet reviewResultSet = reviewStatement.executeQuery();
+                while (reviewResultSet.next()) {
+                    ProductReviewDTO review = getProductReviewDTO(reviewResultSet);
+                    product.getReviews().add(review);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error fetching products with reviews", e);
+            throw new RuntimeException(e);
         }
         return products;
     }
 
+    private static ProductReviewDTO getProductReviewDTO(ResultSet reviewResultSet) throws SQLException {
+        ProductReviewDTO review = new ProductReviewDTO(
+                reviewResultSet.getInt("review_id"),
+                reviewResultSet.getInt("product_id"),
+                reviewResultSet.getString("review_text"),
+                reviewResultSet.getInt("rating"),
+                reviewResultSet.getDate("created_at")
+        );
+        return review;
+    }
+
+    private static ProductDTO getProductDTO(ResultSet productResultSet) throws SQLException {
+        ProductDTO product = new ProductDTO(
+                productResultSet.getInt("product_id"),
+                productResultSet.getString("product_name"),
+                productResultSet.getString("description"),
+                productResultSet.getDouble("price"),
+                productResultSet.getInt("quantity_in_stock"),
+                productResultSet.getString("category"),
+                productResultSet.getString("created_at")
+        );
+        return product;
+    }
 }

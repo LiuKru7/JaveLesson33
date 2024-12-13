@@ -40,16 +40,4 @@ public class ProductDTO {
         this.category = category;
         this.createdAt = createdAt;
     }
-
-    public ProductDTO(ProductDTO product) {
-        this.productId = product.getProductId();
-        this.productName = product.getProductName();
-        this.description = product.getDescription();
-        this.price = product.getPrice();
-        this.quantityInStock = product.getQuantityInStock();
-        this.category = product.getCategory();
-        this.createdAt = product.getCreatedAt();
-        this.reviews = new ArrayList<>(product.getReviews());
-    }
-
 }

@@ -7,17 +7,14 @@ import classWork.service.ProductService;
 import classWork.util.ProductDataInitializer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 public class ProductMain {
 
     public static void main(String[] args) {
         List<ProductDTO> products = new ArrayList<>();
         List<ProductReviewDTO> reviews = new ArrayList<>();
-        Map<Integer, List<ProductReviewDTO>> reviewsMap = new HashMap<>();
-        List<ProductDTO> productsWithReviews = new ArrayList<>();
 
         ProductRepository productRepository = new ProductRepository();
         ProductService productService = new ProductService();
@@ -37,9 +34,7 @@ public class ProductMain {
 
         products = productRepository.getAllProducts();
         reviews = productRepository.getAllReviews();
-        reviewsMap = productRepository.getAllProductsWithReviews();
-        productsWithReviews = productService.getAllProductsWithReviews(products, reviews);
-        productsWithReviews = productRepository.getAllProductsWithReviewsSql();
+        products = productRepository.getAllProductsWithReviewsSql();
 
         //service
         System.out.println("\nProducts belonging to the 'berries' category:");
@@ -58,20 +53,16 @@ public class ProductMain {
         System.out.println(productService.calculateTotalStockValue(products));
 
         System.out.println("\nProducts with reviews rated 4 or higher:");
-        productService.getProductsWithPositiveReviews(productsWithReviews).forEach(System.out::println);
-        productService.getProductsWithPositiveReviews(products, reviewsMap).forEach(System.out::println);
+        productService.getProductsWithPositiveReviews(products).forEach(System.out::println);
 
         System.out.println("\nTop 3 highest-rated products:");
-        productService.getTopRatedProducts(productsWithReviews, 3).forEach(System.out::println);
-        productService.getTopRatedProducts(productsWithReviews, reviewsMap, 3).forEach(System.out::println);
+        productService.getTopRatedProducts(products, 3).forEach(System.out::println);
 
         System.out.println("\nReview texts for all products:");
-        productService.getAllReviewTexts(productsWithReviews).forEach(System.out::println);
-        productService.getAllReviewTexts(products, reviewsMap).forEach(System.out::println);
+        productService.getAllReviewTexts(products).forEach(System.out::println);
 
         System.out.println("\nAverage rating for each product:");
-        System.out.println(productService.calculateAverageRatingPerProduct(productsWithReviews));
-        System.out.println(productService.calculateAverageRatingPerProduct(products, reviewsMap));
+        System.out.println(productService.calculateAverageRatingPerProduct(products));
     }
 }
 
